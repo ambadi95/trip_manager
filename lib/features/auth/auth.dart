@@ -22,7 +22,7 @@ class Auth extends StatelessWidget {
         child: BlocListener<AuthBloc, AuthState>(listener: (context, state) {
           if (state is LoginSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Login Successful!')),
+              const SnackBar(content: Text('Logged in!')),
             );
             navigateTo(context, const Dashboard());
           } else if (state is LoginFailure) {
