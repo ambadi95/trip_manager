@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trip_manager/core/components/custom_button.dart';
 import 'package:trip_manager/core/components/custom_text_field.dart';
+import 'package:trip_manager/core/components/space.dart';
 import 'package:trip_manager/features/auth/auth_bloc.dart';
 import 'package:trip_manager/features/auth/auth_state.dart';
-import 'package:trip_manager/features/auth/otp.dart';
-import '../../core/theme/theme_notifier.dart';
+import 'package:trip_manager/features/dashboard/dashboard.dart';
 import '../../core/utils.dart';
 import 'auth_event.dart';
 
-class Auth extends StatelessWidget {
-  final ThemeNotifier themeNotifier;
-   Auth({super.key, required this.themeNotifier});
+class OtpScreen extends StatelessWidget {
+  final String mobileNumber;
+  OtpScreen({super.key, required this.mobileNumber});
 
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class Auth extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Logged in!')),
             );
-            navigateTo(context, OtpScreen(mobileNumber: phoneController.text,));
+            navigateTo(context, const Dashboard());
           } else if (state is LoginFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error)),
@@ -34,51 +34,32 @@ class Auth extends StatelessWidget {
           if (state is LoginLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-
           return SafeArea(
             child: Scaffold(
-              appBar: PreferredSize(
-                  preferredSize: const Size(double.infinity, 60),
-                  child: SizedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 12, right: 10),
-                          child: Center(
-                              child: Text(
-                            'Mode',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          )),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Switch(
-                            value: themeNotifier.isDarkMode,
-                            onChanged: (value) {
-                              themeNotifier.toggleTheme();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
+              appBar: AppBar(),
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Login',
+                      'OTP',
                       style: TextStyle(
                         fontSize: 34,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                     const Space(height: 10),
+                     Text(
+                      'OTP is send to $mobileNumber',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    const Space(height: 10),
                     CustomTextField(
-                      controller: phoneController,
-                      hintText: 'Phone Number',
+                      controller: otpController,
+                      hintText: 'Enter OTP',
                       keyboardType: TextInputType.phone,
                       onChange: (val) => {},
                     ),
@@ -86,7 +67,7 @@ class Auth extends StatelessWidget {
                       title: 'Continue',
                         onTap : (){
                           BlocProvider.of<AuthBloc>(context).add(
-                            PhoneNumberSubmitted(phoneController.text),
+                            OtpSubmitted(otpController.text),
                           );
                         }
                     )

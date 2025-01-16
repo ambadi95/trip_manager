@@ -57,6 +57,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onOtpSubmitted(OtpSubmitted event, Emitter<AuthState> emit) async {
     emit(LoginLoading());
     try {
+      final otp = event.otp.trim();
+      if (otp.isEmpty || otp.length !=6) {
+        emit(const LoginFailure("Invalid OTP"));
+        return;
+      }
       // final credential = PhoneAuthProvider.credential(
       //   verificationId: state is OtpRequired ? (state as OtpRequired).verificationId : "",
       //   smsCode: event.otp,
