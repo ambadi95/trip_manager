@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trip_manager/features/dashboard/add.dart';
 import 'package:trip_manager/features/dashboard/home.dart';
 import 'package:trip_manager/features/dashboard/profile.dart';
 
@@ -28,7 +29,7 @@ class _DashboardState extends State<Dashboard> {
             ? const Home()
             : _selectedIndex == 2
                 ? const Profile()
-                : null,
+                : const Add(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
