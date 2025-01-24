@@ -13,3 +13,9 @@ void navigateTo(BuildContext context, Widget screen, {bool replace = false}) {
     );
   }
 }
+
+void goBack(BuildContext context, {dynamic result}) {
+  if (Navigator.canPop(context)) {
+    Navigator.pop(context, result);
+  }
+}
